@@ -30,6 +30,7 @@ jobs:
       - name: npm install and build
         env:
           REACT_APP_UPTIMER_API_KEYS: ${{ secrets.REACT_APP_UPTIMER_API_KEYS }}
+          PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
         run: |
           npm install
           npm run build
