@@ -19,7 +19,6 @@ function App() {
     if (typeof keys === 'string') return [keys];
     return [];
   }, []);
-  console.log(apikeys)
 
   return (
     <>
