@@ -2,6 +2,7 @@
   "name": "uptime-status",
   "version": "2.0.0",
   "license": "MIT",
+  "homepage": "${PUBLIC_URL}",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build"
