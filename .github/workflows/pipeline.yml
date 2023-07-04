@@ -1,0 +1,45 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [master]
+
+env:
+  TZ: Asia/Shanghai
+  GITEE_REPO_ADDRESS: gitee.com/llnancy/status.git
+
+jobs:
+  build:
+    name: CI CD
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: npm install and build
+        env:
+          REACT_APP_UPTIMER_API_KEYS: ${{ secrets.REACT_APP_UPTIMER_API_KEYS }}
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy
+        run: |
+          git clone https://llnancy:${{ secrets.GITEE_TOKEN }}@$GITEE_REPO_ADDRESS .deploy_git
+          mv .deploy_git/.git/ ./build/
+          cd ./build/
+          git config user.name "llnancy"
+          git config user.email "admin@lilu.org.cn"
+          git add .
+          git commit -m "Github Actions Auto Builder at $(date +'%Y-%m-%d %H:%M')"
+          git push --force --quiet "https://llnancy:${{ secrets.GITEE_TOKEN }}@$GITEE_REPO_ADDRESS" master:master
